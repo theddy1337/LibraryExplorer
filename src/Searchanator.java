@@ -11,8 +11,8 @@ public class Searchanator {
     private File file;
     private StringBuilder warAndPeace;
     private AtomicInteger atomicInteger = new AtomicInteger(0);
-    private AtomicInteger keywordVoinaCounter = new AtomicInteger(0);
-    private AtomicInteger keywordMirCounter = new AtomicInteger(0);
+    private int keywordVoinaCounter = 0;
+    private int keywordMirCounter = 0;
     private Map<String, Integer> finalMap = new TreeMap<>();
     private ConcurrentHashMap<Integer, String> tempMap = new ConcurrentHashMap<>();
 
@@ -49,10 +49,10 @@ public class Searchanator {
 
                 for (int i = 0; i < words.length; i++) {
                     if (words[i].contains(KEYWORD_VOINA)) {
-                        keywordVoinaCounter.getAndIncrement();
+                        keywordVoinaCounter++;
                     }
                     if (words[i].contains(KEYWORD_MIR)) {
-                        keywordMirCounter.getAndIncrement();
+                        keywordMirCounter++;
                     }
                     if (!(finalMap.containsKey(words[i]))) {
                         finalMap.put(words[i], 1);
@@ -62,6 +62,7 @@ public class Searchanator {
                     }
                 }
             }
+            br.close();
         }
         catch (IOException e) {
             System.out.println("Oopsie, something went wrong :(");
@@ -80,7 +81,9 @@ public class Searchanator {
                     }
                 }
             });
+
             t.start();
+
             try {
                 t.join();
             } catch (InterruptedException e) {
@@ -94,9 +97,8 @@ public class Searchanator {
 
         System.out.println();
         System.out.println("Comma counter: " + atomicInteger);
-        System.out.println("Words that contain 'война': " + keywordVoinaCounter); // 282  * need to find 5 more
-        System.out.println("Words that contain 'мир': " + keywordMirCounter); //507 * need to find 10 more
+        System.out.println("Words that contain 'война': " + keywordVoinaCounter);
+        System.out.println("Words that contain 'мир': " + keywordMirCounter);
 
     }
-
 }
