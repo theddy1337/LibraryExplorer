@@ -1,3 +1,5 @@
+import Exceptions.InvalidNumberOfThreadsException;
+
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -9,6 +11,7 @@ public class Searchanator {
     private static final String KEYWORD_MIR = "мир";
 
     private File file;
+    private Scanner s;
     private StringBuilder warAndPeace;
     private AtomicInteger atomicInteger = new AtomicInteger(0);
     private int keywordVoinaCounter = 0;
@@ -17,7 +20,7 @@ public class Searchanator {
     private ConcurrentHashMap<Integer, String> tempMap = new ConcurrentHashMap<>();
 
 
-    private ConcurrentHashMap<Integer, String> splitter(String text, int size) {
+    private ConcurrentHashMap<Integer, String> splitter(String text, int size){
 
         ConcurrentHashMap<Integer,String> map = new ConcurrentHashMap<>();
         final int lengthOfPart = text.length() / size;
@@ -34,9 +37,18 @@ public class Searchanator {
 
     public void process(String filepath, int numberOfThreads) {
 
+        if (numberOfThreads < 1) {
+            try {
+                throw new InvalidNumberOfThreadsException();
+            } catch (InvalidNumberOfThreadsException e) {
+                System.out.println("Ops, something went wrong :( " + e.getMessage());
+                return;
+            }
+        }
+
         this.file = new File(filepath);
         warAndPeace = new StringBuilder();
-        BufferedReader br;
+        BufferedReader br = null;
 
         try {
 
@@ -62,13 +74,23 @@ public class Searchanator {
                     }
                 }
             }
-            br.close();
         }
         catch (IOException e) {
             System.out.println("Oopsie, something went wrong :(");
+            return;
+        }
+        finally {
+            try {
+                if (br != null) {
+                    br.close();
+                }
+            }
+            catch (IOException e) {
+                System.out.println("Ops, something went wrong :( " + e.getMessage());
+            }
         }
 
-        tempMap.putAll(splitter(warAndPeace.toString(), numberOfThreads));
+            tempMap.putAll(splitter(warAndPeace.toString(), numberOfThreads));
 
         for (Map.Entry<Integer, String> i : tempMap.entrySet()) {
 

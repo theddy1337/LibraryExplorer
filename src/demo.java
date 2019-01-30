@@ -16,7 +16,7 @@ public class demo {
 
                 long start = System.currentTimeMillis();
 
-                new Searchanator().process("/Users/theddy/Desktop/voinaimir.txt", i);
+                new Searchanator().process("/Users/theddy/Desktop/voinaimir.txt", 1);
 
                 long end = System.currentTimeMillis() - start;
                 total += end;
