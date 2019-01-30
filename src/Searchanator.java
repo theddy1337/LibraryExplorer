@@ -14,21 +14,22 @@ public class Searchanator {
     private AtomicInteger keywordVoinaCounter = new AtomicInteger(0);
     private AtomicInteger keywordMirCounter = new AtomicInteger(0);
     private Map<String, Integer> finalMap = new TreeMap<>();
-    private ConcurrentHashMap<Integer, String> hashMap;
+    private ConcurrentHashMap<Integer, String> tempMap = new ConcurrentHashMap<>();
 
 
-    private void splitter(String text, int size) {
+    private ConcurrentHashMap<Integer, String> splitter(String text, int size) {
 
+        ConcurrentHashMap<Integer,String> map = new ConcurrentHashMap<>();
         final int lengthOfPart = text.length() / size;
         int start = 0;
         int end = lengthOfPart;
-        hashMap = new ConcurrentHashMap<>(size);
 
         for (int i = 0; i < size; i++) {
-            hashMap.put(i+1, warAndPeace.substring(start, end));
+            tempMap.put(i+1, warAndPeace.substring(start, end));
             start = end;
             end += lengthOfPart;
         }
+        return map;
     }
 
     public void process(String filepath, int numberOfThreads) {
@@ -66,9 +67,9 @@ public class Searchanator {
             System.out.println("Oopsie, something went wrong :(");
         }
 
-        splitter(warAndPeace.toString(), numberOfThreads);
+        tempMap.putAll(splitter(warAndPeace.toString(), numberOfThreads));
 
-        for (Map.Entry<Integer, String> i : hashMap.entrySet()) {
+        for (Map.Entry<Integer, String> i : tempMap.entrySet()) {
 
             Thread t = new Thread(() -> {
 
