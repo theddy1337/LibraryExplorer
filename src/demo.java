@@ -4,6 +4,7 @@ public class demo {
 
     public static void main(String[] args) {
 
+
         long[] averages = new long[10];
         long[] individual = new long[30];
         int k = 0;
@@ -13,10 +14,9 @@ public class demo {
             long total = 0;
 
             for (int j = 0; j < 3; j++) {
-
                 long start = System.currentTimeMillis();
 
-                new Searchanator().process("/Users/theddy/Desktop/voinaimir.txt", 1);
+                new Searchanator().process("/Users/theddy/Desktop/voinaimir.txt", i);
 
                 long end = System.currentTimeMillis() - start;
                 total += end;
@@ -32,43 +32,43 @@ public class demo {
 
         /*-------------------------------------BENCHMAKRS-------------------------------------
         nThreads = 1 ->
-            Attempt 1: 1843ms
-            Attempt 2: 1271ms -------- Average -> 1442ms
-            Attempt 3: 1214ms
+            Attempt 1: 1763ms // inaccurate
+            Attempt 2: 1281ms -------- Average -> 1318ms
+            Attempt 3: 912ms
         nThreads = 2 ->
-            Attempt 1: 1195ms
-            Attempt 2: 1283ms -------- Average -> 1211ms
-            Attempt 3: 1156ms
+            Attempt 1: 802ms
+            Attempt 2: 587ms -------- Average -> 697ms
+            Attempt 3: 602ms
         nThreads = 3 ->
-            Attempt 1: 1240ms
-            Attempt 2: 1160ms -------- Average -> 1230ms
-            Attempt 3: 1292ms
+            Attempt 1: 597ms
+            Attempt 2: 632ms -------- Average -> 610ms
+            Attempt 3: 601ms
         nThreads = 4 ->
-            Attempt 1: 1304ms
-            Attempt 2: 1176ms -------- Average -> 1229ms
-            Attempt 3: 1209ms
+            Attempt 1: 580ms
+            Attempt 2: 566ms -------- Average -> 565ms
+            Attempt 3: 551ms
         nThreads = 5 ->
-            Attempt 1: 1204ms
-            Attempt 2: 1188ms -------- Average -> 1186ms
-            Attempt 3: 1167ms
+            Attempt 1: 651ms
+            Attempt 2: 765ms -------- Average -> 670ms
+            Attempt 3: 595ms
         nThreads = 6 ->
-            Attempt 1: 1293ms
-            Attempt 2: 1304ms -------- Average -> 1249ms
-            Attempt 3: 1152ms
+            Attempt 1: 547ms
+            Attempt 2: 539ms -------- Average -> 542ms
+            Attempt 3: 541ms
         nThreads = 7 ->
-            Attempt 1: 1167ms
-            Attempt 2: 1174ms -------- Average -> 1209ms
-            Attempt 3: 1288ms
+            Attempt 1: 537ms
+            Attempt 2: 555ms -------- Average -> 548ms
+            Attempt 3: 554ms
         nThreads = 8 ->
-            Attempt 1: 1169ms
-            Attempt 2: 1162ms -------- Average -> 1187ms
-            Attempt 3: 1230ms
+            Attempt 1: 526ms
+            Attempt 2: 528ms -------- Average -> 525ms
+            Attempt 3: 521ms
         nThreads = 9 ->
-            Attempt 1: 1168ms
-            Attempt 2: 1195ms -------- Average -> 1207ms
-            Attempt 3: 1259ms
+            Attempt 1: 642ms
+            Attempt 2: 529ms -------- Average -> 563ms
+            Attempt 3: 519ms
         nThreads = 10->
-            Attempt 1: 1258ms
-            Attempt 2: 1865ms -------- Average -> 1464ms
-            Attempt 3: 1269ms
+            Attempt 1: 553ms
+            Attempt 2: 552ms -------- Average -> 545ms
+            Attempt 3: 531ms
          */

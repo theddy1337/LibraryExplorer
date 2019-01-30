@@ -1,5 +1,4 @@
 import Exceptions.InvalidNumberOfThreadsException;
-
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -11,12 +10,10 @@ public class Searchanator {
     private static final String KEYWORD_MIR = "мир";
 
     private File file;
-    private Scanner s;
-    private StringBuilder warAndPeace;
-    private AtomicInteger atomicInteger = new AtomicInteger(0);
-    private int keywordVoinaCounter = 0;
-    private int keywordMirCounter = 0;
-    private Map<String, Integer> finalMap = new TreeMap<>();
+    private AtomicInteger commaCounter = new AtomicInteger(0);
+    private AtomicInteger voinaCounter = new AtomicInteger(0);
+    private AtomicInteger mirCounter = new AtomicInteger(0);
+    private ConcurrentHashMap<String, Integer> finalMap = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, String> tempMap = new ConcurrentHashMap<>();
 
 
@@ -28,7 +25,7 @@ public class Searchanator {
         int end = lengthOfPart;
 
         for (int i = 0; i < size; i++) {
-            tempMap.put(i+1, warAndPeace.substring(start, end));
+            tempMap.put(i+1, text.substring(start, end));
             start = end;
             end += lengthOfPart;
         }
@@ -47,70 +44,61 @@ public class Searchanator {
         }
 
         this.file = new File(filepath);
-        warAndPeace = new StringBuilder();
-        BufferedReader br = null;
+        StringBuilder warAndPeace = new StringBuilder();
+        Thread t = null;
 
-        try {
+        try (BufferedReader br = new BufferedReader(new FileReader(new File(filepath)))) {
 
-            br = new BufferedReader(new FileReader(new File(filepath)));
             while (br.read() != -1) {
-
                 String text = br.readLine();
-                warAndPeace.append(text.replaceAll("[!@#$%^&*()“=-_.\"„?№\":{}“|<…’>;-]", ""));
-                String[] words = text.split(" ");
-
-                for (int i = 0; i < words.length; i++) {
-                    if (words[i].contains(KEYWORD_VOINA)) {
-                        keywordVoinaCounter++;
-                    }
-                    if (words[i].contains(KEYWORD_MIR)) {
-                        keywordMirCounter++;
-                    }
-                    if (!(finalMap.containsKey(words[i]))) {
-                        finalMap.put(words[i], 1);
-                    }
-                    else {
-                        finalMap.put(words[i], finalMap.get(words[i]) +1);
-                    }
-                }
+                warAndPeace.append(text);
             }
         }
-        catch (IOException e) {
-            System.out.println("Oopsie, something went wrong :(");
-            return;
-        }
-        finally {
-            try {
-                if (br != null) {
-                    br.close();
-                }
-            }
-            catch (IOException e) {
-                System.out.println("Ops, something went wrong :( " + e.getMessage());
-            }
+        catch (IOException ex) {
+            System.out.println("Ops, something went wrong :(");
         }
 
-            tempMap.putAll(splitter(warAndPeace.toString(), numberOfThreads));
+        tempMap.putAll(splitter(warAndPeace.toString(), numberOfThreads));
 
         for (Map.Entry<Integer, String> i : tempMap.entrySet()) {
 
-            Thread t = new Thread(() -> {
+            t = new Thread(() -> {
+
+                String[] words = i.getValue().replaceAll("[!@#$%^&“)№*.(=-_\"„?:{}|<…’>;-]", " ").split(" ");
+
+                for (int j = 0; j < words.length; j++) {
+                    if (words[j].contains(KEYWORD_VOINA)) {
+                        voinaCounter.getAndIncrement();
+                    }
+                    if (words[j].contains(KEYWORD_MIR)) {
+                        mirCounter.getAndIncrement();
+                    }
+                    if (!(finalMap.containsKey(words[j]))) {
+                        finalMap.put(words[j].replace(",", ""), 1);
+                    }
+                    else {
+                        finalMap.put(words[j].replace(",", ""), finalMap.get(words[j]) +1);
+                    }
+                }
 
                 for (int j = 0; j < i.getValue().length(); j++) {
+
                     char c = ',';
                     if (i.getValue().charAt(j) == c) {
-                        atomicInteger.getAndIncrement();
+                        commaCounter.getAndIncrement();
                     }
                 }
             });
-
             t.start();
+        }
 
-            try {
+        try {
+            if (t != null) {
                 t.join();
-            } catch (InterruptedException e) {
-                System.out.println("Oops, someone interrupted: " + t.getName() + " :(");
             }
+        }
+        catch (InterruptedException e) {
+            System.out.println("Oops, someone interrupted: " + t.getName() + " :(");
         }
 
         for (Map.Entry<String, Integer> entry : finalMap.entrySet()) {
@@ -118,9 +106,9 @@ public class Searchanator {
         }
 
         System.out.println();
-        System.out.println("Comma counter: " + atomicInteger);
-        System.out.println("Words that contain 'война': " + keywordVoinaCounter);
-        System.out.println("Words that contain 'мир': " + keywordMirCounter);
+        System.out.println("Comma counter: " + commaCounter);
+        System.out.println("Words that contain 'война': " + voinaCounter);
+        System.out.println("Words that contain 'мир': " + mirCounter);
 
     }
 }
