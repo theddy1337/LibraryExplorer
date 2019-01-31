@@ -67,10 +67,10 @@ public class Searchanator {
                 String[] words = i.getValue().replaceAll("[!@#$%^&“)№*.(=-_\"„?:{}|<…’>;-]", " ").split(" ");
 
                 for (int j = 0; j < words.length; j++) {
-                    if (words[j].contains(KEYWORD_VOINA)) {
+                    if (words[j].contains(KEYWORD_VOINA) || words[j].equalsIgnoreCase(KEYWORD_VOINA)) {
                         voinaCounter.getAndIncrement();
                     }
-                    if (words[j].contains(KEYWORD_MIR)) {
+                    if (words[j].contains(KEYWORD_MIR) || words[j].equalsIgnoreCase(KEYWORD_MIR)) {
                         mirCounter.getAndIncrement();
                     }
                     if (!(finalMap.containsKey(words[j]))) {
