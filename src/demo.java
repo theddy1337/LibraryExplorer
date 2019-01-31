@@ -32,7 +32,7 @@ public class demo {
 
         /*-------------------------------------BENCHMAKRS-------------------------------------
         nThreads = 1 ->
-            Attempt 1: 1763ms // inaccurate
+            Attempt 1: 1763ms
             Attempt 2: 1281ms -------- Average -> 1318ms
             Attempt 3: 912ms
         nThreads = 2 ->
