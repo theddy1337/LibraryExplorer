@@ -43,24 +43,19 @@ public class Searchanator {
             }
         }
 
-        this.file = new File(filepath);
-        StringBuilder warAndPeace = new StringBuilder();
+        readFile(filepath);
+        tempMap.putAll(splitter(readFile(filepath), numberOfThreads));
+        searchWithThreads(tempMap);
+        printWords(finalMap);
+
+    }
+
+
+    public void searchWithThreads(Map<Integer, String> map) {
+
         Thread t = null;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(new File(filepath)))) {
-
-            while (br.read() != -1) {
-                String text = br.readLine();
-                warAndPeace.append(text);
-            }
-        }
-        catch (IOException ex) {
-            System.out.println("Ops, something went wrong :(");
-        }
-
-        tempMap.putAll(splitter(warAndPeace.toString(), numberOfThreads));
-
-        for (Map.Entry<Integer, String> i : tempMap.entrySet()) {
+        for (Map.Entry<Integer, String> i : map.entrySet()) {
 
             t = new Thread(() -> {
 
@@ -100,8 +95,29 @@ public class Searchanator {
         catch (InterruptedException e) {
             System.out.println("Oops, someone interrupted: " + t.getName() + " :(");
         }
+    }
 
-        for (Map.Entry<String, Integer> entry : finalMap.entrySet()) {
+    private String readFile(String filepath) {
+
+        this.file = new File(filepath);
+        StringBuilder text = new StringBuilder();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(new File(filepath)))) {
+
+            while (br.read() != -1) {
+                String words = br.readLine();
+                text.append(words);
+            }
+        }
+        catch (IOException ex) {
+            System.out.println("Ops, something went wrong :(");
+        }
+        return text.toString();
+    }
+
+    private void printWords(Map<String, Integer> map) {
+
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
             System.out.println("Word: " + entry.getKey() + " count: " + entry.getValue());
         }
 
