@@ -16,17 +16,18 @@ public class demo {
             for (int j = 0; j < 3; j++) {
                 long start = System.currentTimeMillis();
 
-                new Searchanator().process("/Users/theddy/Desktop/voinaimir.txt", i);
+                new Searchanator().process("voinaimir.txt", i);
 
                 long end = System.currentTimeMillis() - start;
                 total += end;
                 individual[k++] = end;
             }
-            averages[i-1] = total / 3;
-        }
+            averages[i - 1] = total / 3;
 
-        System.out.println(Arrays.toString(averages));
-        System.out.println(Arrays.toString(individual));
+
+            System.out.println(Arrays.toString(averages));
+            System.out.println(Arrays.toString(individual));
+        }
     }
 }
 

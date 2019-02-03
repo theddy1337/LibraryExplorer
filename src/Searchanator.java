@@ -16,8 +16,7 @@ public class Searchanator {
     private ConcurrentHashMap<String, Integer> finalMap = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, String> tempMap = new ConcurrentHashMap<>();
 
-
-    private ConcurrentHashMap<Integer, String> splitter(String text, int size){
+    private ConcurrentHashMap<Integer, String> splitIntoParts(String text, int size){
 
         ConcurrentHashMap<Integer,String> map = new ConcurrentHashMap<>();
         final int lengthOfPart = text.length() / size;
@@ -44,14 +43,13 @@ public class Searchanator {
         }
 
         readFile(filepath);
-        tempMap.putAll(splitter(readFile(filepath), numberOfThreads));
+        tempMap.putAll(splitIntoParts(readFile(filepath), numberOfThreads));
         searchWithThreads(tempMap);
         printWords(finalMap);
 
     }
 
-
-    public void searchWithThreads(Map<Integer, String> map) {
+    private void searchWithThreads(Map<Integer, String> map) {
 
         Thread t = null;
 
