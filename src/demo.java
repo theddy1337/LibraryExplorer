@@ -5,29 +5,33 @@ public class demo {
     public static void main(String[] args) {
 
 
-        long[] averages = new long[10];
-        long[] individual = new long[30];
-        int k = 0;
+//        long[] averages = new long[10];
+//        long[] individual = new long[30];
+//        int k = 0;
+//
+//        for (int i = 1; i <= 10; i++) {
+//
+//            long total = 0;
+//
+//            for (int j = 0; j < 3; j++) {
+//                long start = System.currentTimeMillis();
+//
+//                new Searchanator().process("voinaimir.txt", i);
+//
+//                long end = System.currentTimeMillis() - start;
+//                total += end;
+//                individual[k++] = end;
+//            }
+//            averages[i - 1] = total / 3;
+//
+//
+//            System.out.println(Arrays.toString(averages));
+//            System.out.println(Arrays.toString(individual));
+//        }
 
-        for (int i = 1; i <= 10; i++) {
-
-            long total = 0;
-
-            for (int j = 0; j < 3; j++) {
-                long start = System.currentTimeMillis();
-
-                new Searchanator().process("voinaimir.txt", i);
-
-                long end = System.currentTimeMillis() - start;
-                total += end;
-                individual[k++] = end;
-            }
-            averages[i - 1] = total / 3;
+        new Searchanator().process("voinaimir.txt", 4);
 
 
-            System.out.println(Arrays.toString(averages));
-            System.out.println(Arrays.toString(individual));
-        }
     }
 }
 

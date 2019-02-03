@@ -57,7 +57,7 @@ public class Searchanator {
 
             t = new Thread(() -> {
 
-                String[] words = i.getValue().replaceAll("[!@#$%^&“)№*.(=-_\"„?:{}|<…’>;-]", " ").split(" ");
+                String[] words = i.getValue().replaceAll("[!@#$%^&“)№*.(=-_\"„?:{}|<…’>;-]", " ").toLowerCase().split(" ");
 
                 for (int j = 0; j < words.length; j++) {
                     if (words[j].contains(KEYWORD_VOINA) || words[j].equalsIgnoreCase(KEYWORD_VOINA)) {
